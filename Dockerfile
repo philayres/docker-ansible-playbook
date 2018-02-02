@@ -1,6 +1,6 @@
 FROM alpine:3.6
 
-ENV ANSIBLE_VERSION 2.3.0.0
+ENV ANSIBLE_VERSION 1.9.4
 
 ENV BUILD_PACKAGES \
   bash \
@@ -18,7 +18,8 @@ ENV BUILD_PACKAGES \
   py-pip \
   py-setuptools \
   py-yaml \
-  ca-certificates
+  ca-certificates \
+  iputils
 
 RUN apk --update add --virtual build-dependencies \
   gcc \
@@ -48,19 +49,26 @@ RUN \
   echo "localhost" >> /etc/ansible/hosts
 
 RUN \
+  addgroup normaluser && \
+  adduser -S -G normaluser normaluser
+
+RUN \
   curl -fsSL https://releases.ansible.com/ansible/ansible-${ANSIBLE_VERSION}.tar.gz -o ansible.tar.gz && \
   tar -xzf ansible.tar.gz -C /ansible --strip-components 1 && \
   rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging
 
-ENV ANSIBLE_GATHERING smart
-ENV ANSIBLE_HOST_KEY_CHECKING false
-ENV ANSIBLE_RETRY_FILES_ENABLED false
 ENV ANSIBLE_ROLES_PATH /ansible/playbooks/roles
-ENV ANSIBLE_SSH_PIPELINING True
 ENV PYTHONPATH /ansible/lib
 ENV PATH /ansible/bin:$PATH
 ENV ANSIBLE_LIBRARY /ansible/library
 
 WORKDIR /ansible/playbooks
+
+#RUN \
+#  mkdir /home/normaluser/.ssh && \
+#  touch /home/normaluser/.ssh/config && \
+#  chmod 700 /home/normaluser/.ssh && \
+
+USER normaluser
 
 ENTRYPOINT ["ansible-playbook"]

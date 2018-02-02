@@ -1,0 +1,10 @@
+Host vagrant-box-hostname
+  HostName vagrant-box-hostname
+  User vagrant
+  Port 22
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile ~/.ssh/vagrant_id_rsa
+  IdentitiesOnly yes
+  LogLevel FATAL
