@@ -1,7 +1,7 @@
 #VAGRANT_IP=192.168.1.12
 #VAGRANT_HOSTNAME=vagrant-fphs-webapp-box
 
-if [ -z VAGRANT_IP ]; then
+if [ -z "$VAGRANT_IP" ]; then
 ADD_HOST_FLAG=
 VAGRANT_PK=
 else
@@ -9,6 +9,7 @@ ADD_HOST_FLAG=--add-host="$VAGRANT_HOSTNAME:$VAGRANT_IP"
 VAGRANT_PK='-v $(pwd)/.vagrant/machines/vagrant-fphs-webapp-box/virtualbox/private_key:/home/$USER/.ssh/vagrant_id_rsa'
 fi
 
+chmod 700 $(pwd)/ssh-config-docker
 
 docker run --rm -it \
 $ADD_HOST_FLAG \

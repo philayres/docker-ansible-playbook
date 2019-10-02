@@ -64,7 +64,7 @@ ENV ANSIBLE_LIBRARY /ansible/library
 
 WORKDIR /ansible/playbooks
 
-#RUN \
+RUN \
 #  mkdir /home/normaluser/.ssh && \
 #  touch /home/normaluser/.ssh/config && \
 #  chmod 700 /home/normaluser/.ssh && \
